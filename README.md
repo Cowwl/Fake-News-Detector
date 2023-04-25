@@ -2,20 +2,20 @@
 This project is an ensemble news classifier that predicts whether a news article is real or fake. It combines the predictions of machine learning (ML) models and natural language processing (NLP) models to make the final prediction.
 
 # Dependencies
-joblib
-pandas
-nltk
-numpy
-re
-string
-fastapi
-pydantic
-requests
-spacy
-fastai
+* joblib
+* pandas
+* nltk
+* numpy
+* re
+* string
+* fastapi
+* pydantic
+* requests
+* spacy
+* fastai
 # Usage
 Clone the repository
-Install the dependencies using pip
+Install the dependencies using pip install -r requirements.txt
 Run the main.py file using the command uvicorn main:app --reload on the terminal
 The app will start running on http://127.0.0.1:8000
 ## Endpoints
