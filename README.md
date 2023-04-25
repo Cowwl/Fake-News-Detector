@@ -26,7 +26,7 @@ This endpoint is used to test if the app is running successfully. It returns a "
 ### /predict
 This is the main endpoint that accepts POST requests with JSON data containing the title and body of the news article. It returns a JSON response with the predicted label (Real or Fake) and the probabilities of each label. If the Google Fact-Check API returns a result for the given title, the response also includes the fact-check result.
 
-#How it works
+# How it works
 The app preprocesses the title and body of the news article to extract various features such as the count of sentences, words, stop words, named entities, and sentiment analysis. These features are used as inputs for the ML models. The ML models are trained on a dataset of real and fake news articles and predict the probability of the article being fake.
 
 The NLP models use tokenization, lemmatization, and stop word removal to preprocess the title and body. The preprocessed text is then passed through pre-trained models to predict the probability of the article being real or fake.
