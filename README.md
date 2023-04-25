@@ -15,7 +15,7 @@ This project is an ensemble news classifier that predicts whether a news article
 * fastai
 # Usage
 Clone the repository
-* Install the dependencies using pip install -r requirements.txt.
+* Install the dependencies using pip install -r requirements.txt
 * Download the required models from here: https://drive.google.com/drive/folders/1JcSiUFM4h8oVHujuuy0kzguWzt2JdYmI?usp=sharing
 * Run the main.py file using the command uvicorn main:app --reload on the terminal
 * The app will start running on http://127.0.0.1:8000
