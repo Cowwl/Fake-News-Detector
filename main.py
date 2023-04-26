@@ -24,13 +24,15 @@ import spacy
 from fastai.text.all import *
 import requests
 import pathlib
-temp = pathlib.PosixPath
-pathlib.PosixPath = pathlib.WindowsPath
-# ! cp -rf /usr/share/nltk_data/corpora/wordnet2022 /usr/share/nltk_data/corpora/wordnet
-nltk.download('words')
-nltk.download('maxent_ne_chunker')
-nltk.download('vader_lexicon')
-nltk.download('averaged_perceptron_tagger')
+
+# If using Windows, uncomment the following line
+# temp = pathlib.PosixPath
+# pathlib.PosixPath = pathlib.WindowsPath
+
+nltk.download("words")
+nltk.download("maxent_ne_chunker")
+nltk.download("vader_lexicon")
+nltk.download("averaged_perceptron_tagger")
 nltk.download("punkt")
 nltk.download("stopwords")
 nltk.download("wordnet")
@@ -220,9 +222,12 @@ class NewsInput(BaseModel):
 
 
 app = FastAPI()
+
+
 @app.get("/home")
 async def home():
     return "Hello World"
+
 
 @app.post("/predict")
 async def predict_news(news: NewsInput):
