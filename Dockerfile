@@ -6,10 +6,16 @@ WORKDIR /app
 
 # Install dependencies first
 COPY requirements.txt .
+
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Copy the current directory contents into the container at /app
 COPY . .
+
+# Install libgomp1 for the FastAPI app to run
+RUN apt-get update
+RUN apt-get upgrade
+RUN apt-get install libgomp1
 
 # Expose port 8000 for the FastAPI app to listen on
 EXPOSE 8000
