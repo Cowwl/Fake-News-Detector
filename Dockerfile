@@ -20,5 +20,6 @@ RUN apt-get install libgomp1
 # Expose port 8000 for the FastAPI app to listen on
 EXPOSE 8000
 
-# Define the command to run the app when the container starts
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Define the command to run the app when the container starts with reload
+
+CMD ["uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
