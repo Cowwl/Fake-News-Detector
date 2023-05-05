@@ -8,6 +8,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import requests
 import nltk
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 from nltk.corpus import stopwords
 import json
 from nltk.tokenize import RegexpTokenizer
@@ -25,10 +27,9 @@ from fastai.text.all import *
 import requests
 import pathlib
 
-# If using Windows, uncomment the following line
-# temp = pathlib.PosixPath
-# pathlib.PosixPath = pathlib.WindowsPath
-
+temp = pathlib.PosixPath
+pathlib.PosixPath = pathlib.WindowsPath
+# ! cp -rf /usr/share/nltk_data/corpora/wordnet2022 /usr/share/nltk_data/corpora/wordnet
 nltk.download("words")
 nltk.download("maxent_ne_chunker")
 nltk.download("vader_lexicon")
@@ -233,12 +234,44 @@ async def home():
 async def predict_news(news: NewsInput):
     title = news.title
     body = news.body
+
+    # Clean the body by extracting important sentences
+    sentences = nltk.sent_tokenize(body)
+    vectorizer = TfidfVectorizer(stop_words="english")
+    sentence_vectors = vectorizer.fit_transform(sentences)
+    title_vector = vectorizer.transform([title])
+    similarities = cosine_similarity(sentence_vectors, title_vector)
+
+    # Keep only sentences with high similarity to the title
+    threshold = 0.2
+    relevant_sentences = [
+        sentences[i] for i in range(len(sentences)) if similarities[i] > threshold
+    ]
+    cleaned_body = " ".join(relevant_sentences)
+
     url = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
     query_params = {"query": title, "key": "AIzaSyAilvlYfblaFQlTAesyYX0jZcaJmMjcfgo"}
 
     response = requests.get(url, params=query_params)
-    print(response)
-    if response.json():
+
+    # Check if the response has a claims key
+    if "claims" in response.json():
         return response.json()["claims"][0]["claimReview"][0]
     else:
-        return ensemble_predict(title, body)
+        return ensemble_predict(title, cleaned_body)
+
+
+# @app.post("/predict")
+# async def predict_news(news: NewsInput):
+#     title = news.title
+#     body = news.body
+#     url = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
+#     query_params = {"query": title, "key": "AIzaSyAilvlYfblaFQlTAesyYX0jZcaJmMjcfgo"}
+
+#     response = requests.get(url, params=query_params)
+#     print(response)
+#     # Check if the response has a claims key
+#     if "claims" in response.json():
+#         return response.json()["claims"][0]["claimReview"][0]
+#     else:
+#         return ensemble_predict(title, body)
